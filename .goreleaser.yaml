@@ -8,8 +8,8 @@ builds:
   - main: ./cmd/go-gatest
     id: go-gatest-linux
     binary: go-gatest
-    gcflags:
-      - all=-trimpath={{.Env.GOPATH}}
+    flags:
+      - -trimpath
     ldflags:
       - -s -w
       - "{{- if not .IsSnapshot }}-X main.version={{.Version}}-{{.ShortCommit}}{{- if .IsGitDirty }}+dev{{ end }}{{ end }}"
@@ -49,8 +49,8 @@ builds:
   - main: ./cmd/go-gatest
     id: go-gatest-windows
     binary: go-gatest
-    gcflags:
-      - all=-trimpath={{.Env.GOPATH}}
+    flags:
+      - -trimpath
     ldflags:
       - -s -w
       - "{{- if not .IsSnapshot }}-X main.version={{.Version}}-{{.ShortCommit}}{{- if .IsGitDirty }}+dev{{ end }}{{ end }}"

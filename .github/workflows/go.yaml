@@ -14,13 +14,35 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     container:
-    image: debian:12
+      image: debian:12
 
     steps:
-    - uses: actions/checkout@v6
+    - name: Install cross build dependencies
+      run: |
+        dpkg --add-architecture i386
+        dpkg --add-architecture arm64
+        apt-get update
+        apt-get install -y \
+          build-essential \
+          curl \
+          gcc-i686-linux-gnu g++-i686-linux-gnu \
+          gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+          gcc-mingw-w64-i686 g++-mingw-w64-i686 \
+          gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 \
+          git \
+          libsqlite3-dev:amd64 \
+          libsqlite3-dev:i386 \
+          libsqlite3-dev:arm64
+
+    - name: Checkout
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
-  
+
+    - name: Mark workspace as safe for git
+      run: |
+        git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
     - name: Set up Go
       uses: actions/setup-go@v6
       with:
@@ -28,20 +50,10 @@ jobs:
         cache: true
         cache-dependency-path: go.sum
 
-    - name: Install cross build dependencies
+    - name: Install Go tools
       run: |
-        sudo dpkg --add-architecture i386
-        sudo dpkg --add-architecture arm64
-        sudo apt-get update
-        sudo apt-get install -y \
-          gcc-i686-linux-gnu g++-i686-linux-gnu \
-          gcc-x86-64-linux-gnu g++-x86-64-linux-gnu \
-          gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
-          gcc-mingw-w64-i686 g++-mingw-w64-i686 \
-          gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 \
-          libsqlite3-dev:amd64 \
-          libsqlite3-dev:i386 \
-          libsqlite3-dev:arm64
+        go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
+        echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
     - name: Run GoReleaser snapshot
       if: github.event_name == 'pull_request'
@@ -49,6 +61,7 @@ jobs:
       with:
         version: "~> v2"
         args: release --snapshot --clean
+        workdir: ${{ github.workspace }}
 
     - name: Run GoReleaser release
       if: github.event_name == 'push'
@@ -56,5 +69,6 @@ jobs:
       with:
         version: "~> v2"
         args: release --clean
+        workdir: ${{ github.workspace }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
