@@ -55,7 +55,7 @@ jobs:
         go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
         echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-    - name: Run GoReleaser snapshot
+    - name: Build snapshot archives
       if: github.event_name == 'pull_request'
       uses: goreleaser/goreleaser-action@v7
       with:
@@ -63,7 +63,17 @@ jobs:
         args: release --snapshot --clean
         workdir: ${{ github.workspace }}
 
-    - name: Run GoReleaser release
+    - name: Upload snapshot archives
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v7
+      with:
+        name: snapshot-archives
+        path: |
+          dist/**/*.zip
+          dist/**/*.tar.gz
+        if-no-files-found: error
+
+    - name: Build release archives
       if: github.event_name == 'push'
       uses: goreleaser/goreleaser-action@v7
       with:
