@@ -9,7 +9,7 @@ import (
 )
 
 var removeCommand = &cobra.Command{
-	Use:   "remove I",
+	Use:   "remove <id>",
 	Short: "Remove a task by task ID",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {

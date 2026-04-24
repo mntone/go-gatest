@@ -8,7 +8,7 @@ import (
 )
 
 var searchCommand = &cobra.Command{
-	Use:     "search K",
+	Use:     "search <keyword>",
 	Aliases: []string{"find"},
 	Short:   "Search tasks by keyword",
 	Args:    cobra.ExactArgs(1),

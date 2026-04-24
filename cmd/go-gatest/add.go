@@ -9,8 +9,8 @@ import (
 )
 
 var addCommand = &cobra.Command{
-	Use:   "add D",
-	Short: "Add a task with Description",
+	Use:   "add <description>",
+	Short: "Add a task",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return withTaskRepository(cmd, func(repo internal.TaskRepository) error {
