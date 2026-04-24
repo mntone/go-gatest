@@ -6,7 +6,7 @@
 	},
 	"StringFileInfo": {
 		"CompanyName": "mntone",
-		"LegalCopyright": "Copyright (c) 2026 mntone. Licensed under GPLv3.",
+		"LegalCopyright": "Copyright (c) 2026 mntone. Licensed under MIT.",
 		"ProductName": "miruzo"
 	},
 	"VarFileInfo": {
