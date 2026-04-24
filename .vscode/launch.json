@@ -1,0 +1,55 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "go-gatest add (Debug)",
+			"type": "go",
+			"request": "launch",
+			"mode": "exec",
+			"preLaunchTask": "go build ./cmd/go-gatest (-Og -g)",
+			"program": "${workspaceFolder}/bin/go-gatest",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"add",
+				"${input:cli_add_operation}",
+			],
+		},
+		{
+			"name": "go-gatest remove (Debug)",
+			"type": "go",
+			"request": "launch",
+			"mode": "exec",
+			"preLaunchTask": "go build ./cmd/go-gatest (-Og -g)",
+			"program": "${workspaceFolder}/bin/go-gatest",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"remove",
+				"${input:cli_remove_operation}",
+			],
+		},
+		{
+			"name": "go-gatest list (Debug)",
+			"type": "go",
+			"request": "launch",
+			"mode": "exec",
+			"preLaunchTask": "go build ./cmd/go-gatest (-Og -g)",
+			"program": "${workspaceFolder}/bin/go-gatest",
+			"cwd": "${workspaceFolder}",
+			"args": [
+				"list",
+			],
+		}
+	],
+	"inputs": [
+		{
+			"id": "cli_add_operation",
+			"type": "promptString",
+			"description": "Add command to run for miruzo-cli.",
+		},
+		{
+			"id": "cli_remove_operation",
+			"type": "promptString",
+			"description": "Remove command to run for miruzo-cli.",
+		}
+	]
+}

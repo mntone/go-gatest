@@ -1,0 +1,60 @@
+name: go
+
+on:
+  push:
+    tags:
+    - v*.*.*
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container:
+    image: debian:12
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+  
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version-file: go.mod
+        cache: true
+        cache-dependency-path: go.sum
+
+    - name: Install cross build dependencies
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo dpkg --add-architecture arm64
+        sudo apt-get update
+        sudo apt-get install -y \
+          gcc-i686-linux-gnu g++-i686-linux-gnu \
+          gcc-x86-64-linux-gnu g++-x86-64-linux-gnu \
+          gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+          gcc-mingw-w64-i686 g++-mingw-w64-i686 \
+          gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 \
+          libsqlite3-dev:amd64 \
+          libsqlite3-dev:i386 \
+          libsqlite3-dev:arm64
+
+    - name: Run GoReleaser snapshot
+      if: github.event_name == 'pull_request'
+      uses: goreleaser/goreleaser-action@v7
+      with:
+        version: "~> v2"
+        args: release --snapshot --clean
+
+    - name: Run GoReleaser release
+      if: github.event_name == 'push'
+      uses: goreleaser/goreleaser-action@v7
+      with:
+        version: "~> v2"
+        args: release --clean
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

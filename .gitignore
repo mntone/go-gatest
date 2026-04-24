@@ -1,0 +1,6 @@
+# Distribution / packaging
+bin/
+cmd/**/*.syso
+dist/
+tmp/
+*.sqlite
