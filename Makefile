@@ -8,7 +8,7 @@
 #   make release
 #
 
-VERSION := $(shell cat VERSION)
+VERSION := $(shell git describe --tags --abbrev=0 --match 'v[0-9]*.[0-9]*.[0-9]*' 2>/dev/null || echo 0.1.0)
 GIT_COMMIT := $(shell git rev-parse --short HEAD)
 GIT_DIRTY := $(shell test -n "$$(git status --porcelain)" && echo +dev)
 APP_VERSION := $(VERSION)-$(GIT_COMMIT)$(GIT_DIRTY)
