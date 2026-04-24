@@ -16,7 +16,7 @@ APP_VERSION := $(VERSION)-$(GIT_COMMIT)$(GIT_DIRTY)
 BUILD_DIR ?= ./bin
 GO ?= go
 COMMON_FLAGS := -Og -g
-COMMON_GO_FLAGS := -gcflags="all=-N -l" -buildmode=pie -tags='dev libsqlite3' -trimpath
+COMMON_GO_FLAGS := -gcflags="github.com/mntone/go-gatest/...=-N -l" -buildmode=pie -tags='dev libsqlite3' -trimpath
 COMMON_GO_LDFLAGS := -X main.version=$(APP_VERSION)
 
 ifeq ($(shell uname -s),Darwin)
