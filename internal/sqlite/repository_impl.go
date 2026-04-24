@@ -12,7 +12,7 @@ import (
 const (
 	taskAddStmt    = "INSERT INTO tasks(description,created_at,updated_at)VALUES(?1,?2,?2)"
 	taskAllStmt    = "SELECT * FROM tasks ORDER BY updated_at"
-	taskFindStmt   = "SELECT * FROM tasks ORDER BY updated_at"
+	taskFindStmt   = "SELECT * FROM tasks WHERE description LIKE '%'||?||'%' ORDER BY updated_at"
 	taskRemoveStmt = "DELETE FROM tasks WHERE id=?"
 )
 
@@ -90,7 +90,7 @@ func (repo TaskRepositoryImpl) Find(
 	ctx context.Context,
 	keyword string,
 ) (tasks []model.Task, err error) {
-	rows, err := repo.db.QueryContext(ctx, taskFindStmt)
+	rows, err := repo.db.QueryContext(ctx, taskFindStmt, keyword)
 	if err != nil {
 		return
 	}
