@@ -60,7 +60,7 @@ builds:
       - CGO_CXXFLAGS=-Os -fno-plt
       - CGO_FFLAGS=-Os -fno-plt
     goos: [windows]
-    goarch: [amd64]
+    goarch: ['386', amd64]
     go386: [sse2]
     goamd64: [v3]
     overrides:
