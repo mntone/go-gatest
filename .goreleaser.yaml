@@ -87,7 +87,7 @@ archives:
       {{ .ProjectName }}_
       {{- .Os }}_
       {{- if eq .Arch "amd64" }}x86-64{{ if not (eq .Amd64 "v1") }}-{{ .Amd64 }}{{ end }}
-      {{- else if eq .Arch "386" }}x86
+      {{- else if eq .Arch "386" }}x86{{ if not (eq .I386 "softfloat") }}-{{ .I386 }}{{ end }}
       {{- else if eq .Arch "arm64" }}aarch64{{ if not (eq .Arm64 "v8.0") }}-{{ .Arm64 }}{{ end }}
       {{- else }}{{ .Arch }}
       {{- end }}
